@@ -1,5 +1,7 @@
 // On form submit add task
-document.querySelector("form").addEventListener("submit", (e) => {addTask();});
+document.querySelector("form").addEventListener("submit", (e) => {
+  addTask(e);
+});
 
 const loadTasks = () => {
   // check if localStorage has any tasks
@@ -12,24 +14,28 @@ const loadTasks = () => {
   tasks.forEach((task) => {
     const list = document.querySelector("ul");
     const li = document.createElement("li");
-    li.innerHTML = `<input type="checkbox" onclick="taskComplete(this)" class="check" ${task.completed ? "checked" : ""}>
-          <h3 class="task ${task.completed ? "completed" : ""}" >${task.task}</h3><p>${task.des}</p>
+    li.innerHTML = `<input type="checkbox" onclick="taskComplete(this)" class="check" ${
+      task.completed ? "checked" : ""
+    }>
+          <h3 class="task ${task.completed ? "completed" : ""}" >${
+      task.task
+    }</h3><p>${task.des}</p>
           <p class="fa fa-trash" onclick="removeTask(this)">x</p>`;
     list.insertBefore(li, list.children[0]);
   });
-}    
+};
 
-let inner = Array.from(JSON.parse(localStorage.getItem("tasks")));
-console.log(inner);
-let obj = inner.find(o => o.task === '${task}');
-console.log(obj);
-
-function addTask() {
+function addTask(event) {
+  event.preventDefault();
   const task = document.getElementById("name");
   const des = document.getElementById("des");
   const list = document.querySelector("ul");
-  let inner = Array.from(JSON.parse(localStorage.getItem("tasks")));
-  let obj = inner.find(o => o.task === task.value);
+  const local = localStorage.getItem("tasks");
+  let inner = [];
+  if (local) {
+    inner = Array.from(JSON.parse(localStorage.getItem("tasks")));
+  }
+  let obj = inner.find((o) => o.task === task.value);
 
   // return if task is empty
   if (task.value === "") {
@@ -38,7 +44,7 @@ function addTask() {
   }
 
   // check is task already exist
-  if (obj != undefined) {
+  if (obj) {
     window.alert("Task already exist!");
     return;
   }

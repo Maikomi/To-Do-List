@@ -1,6 +1,7 @@
 // On form submit add task
-document.querySelector("form").addEventListener("submit", (e) => {
-  addTask(e);
+document.querySelector("form").addEventListener("submit", e => {
+  e.preventDefault();
+  addTask();
 });
 
 const loadTasks = () => {
@@ -14,19 +15,15 @@ const loadTasks = () => {
   tasks.forEach((task) => {
     const list = document.querySelector("ul");
     const li = document.createElement("li");
-    li.innerHTML = `<input type="checkbox" onclick="taskComplete(this)" class="check" ${
-      task.completed ? "checked" : ""
-    }>
-          <h3 class="task ${task.completed ? "completed" : ""}" >${
-      task.task
-    }</h3><p>${task.des}</p>
-          <p class="fa fa-trash" onclick="removeTask(this)">x</p>`;
+    li.innerHTML = `<input type="checkbox" onclick="taskComplete(this)" class="check" ${task.completed ? "checked" : ""}>
+      <h3 class="task ${task.completed ? "completed" : ""}" >${task.task}</h3>
+      <p>${task.des}</p>
+      <p class="fa fa-trash" onclick="removeTask(this)">x</p>`;
     list.insertBefore(li, list.children[0]);
   });
 };
 
-function addTask(event) {
-  event.preventDefault();
+const addTask = () => {
   const task = document.getElementById("name");
   const des = document.getElementById("des");
   const list = document.querySelector("ul");
@@ -58,7 +55,7 @@ function addTask(event) {
     ])
   );
 
-  // create list item, add innerHTML and append to ul
+  //add innerHTML
   const li = document.createElement("li");
   li.innerHTML = `<input type="checkbox" onclick="taskComplete(this)" class="check">
       <h3 class="task ${task.completed ? "completed" : ""}">${task.value}</h3>
@@ -70,7 +67,7 @@ function addTask(event) {
   des.value = "";
 }
 
-function taskComplete(event) {
+const taskComplete = (event) => {
   let tasks = Array.from(JSON.parse(localStorage.getItem("tasks")));
   tasks.forEach((task) => {
     if (task.task === event.nextElementSibling.value) {
@@ -81,7 +78,7 @@ function taskComplete(event) {
   event.nextElementSibling.classList.toggle("completed");
 }
 
-function removeTask(event) {
+const removeTask = (event) => {
   let tasks = Array.from(JSON.parse(localStorage.getItem("tasks")));
   tasks.forEach((task) => {
     if (task.task === event.parentNode.children[1].value) {
@@ -93,17 +90,7 @@ function removeTask(event) {
   event.parentElement.remove();
 }
 
-// store current task to track changes
-var currentTask = null;
-
-// get current task
-function getCurrentTask(event) {
-  currentTask = event.value;
-}
-
-document.getElementById("die").onclick = clear_me;
-
-function clear_me() {
+const clear_me = () => {
   localStorage.clear();
   location.reload();
 }

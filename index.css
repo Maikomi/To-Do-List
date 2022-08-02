@@ -1,0 +1,29 @@
+.checkbox{
+    background-color: pink;
+    height: 2rem;
+    width: 2rem;
+}
+
+.kill{
+    background-color: rgb(221, 89, 111);
+    height: 2rem;
+    width: 2rem;
+}
+
+
+ul{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    list-style-type: none;
+}
+
+.toBeDone{
+    
+}
+
+
+.completed{
+
+}
+

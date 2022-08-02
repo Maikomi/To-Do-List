@@ -1,5 +1,5 @@
 // On form submit add task
-document.querySelector("form").addEventListener("submit", e => {
+document.querySelector("form").addEventListener("submit", (e) => {
   e.preventDefault();
   addTask();
 });
@@ -15,10 +15,10 @@ const loadTasks = () => {
   tasks.forEach((task) => {
     const list = document.querySelector("ul");
     const li = document.createElement("li");
-    li.innerHTML = `<input type="checkbox" onclick="taskComplete(this)" class="check" ${task.completed ? "checked" : ""}>
-      <h3 class="task ${task.completed ? "completed" : ""}" >${task.task}</h3>
-      <p>${task.des}</p>
-      <p class="fa fa-trash" onclick="removeTask(this)">x</p>`;
+    li.innerHTML = `<div id=${task.id}><section class="checkbox"></section>
+    <h3 class="task ${task.completed ? "completed" : ""}" >${task.task}</h3>
+    <p>${task.des}</p>
+    <section class= "kill" onclick="removeTask(this)"> </section></div>`;
     list.insertBefore(li, list.children[0]);
   });
 };
@@ -46,26 +46,32 @@ const addTask = () => {
     return;
   }
 
+  let taskx = {
+    id: task.value,
+    task: task.value,
+    des: des.value,
+    completed: false,
+  };
   // add task to local storage
   localStorage.setItem(
     "tasks",
     JSON.stringify([
       ...JSON.parse(localStorage.getItem("tasks") || "[]"),
-      { task: task.value, des: des.value, completed: false },
+      taskx,
     ])
   );
 
   //add innerHTML
   const li = document.createElement("li");
-  li.innerHTML = `<input type="checkbox" onclick="taskComplete(this)" class="check">
-      <h3 class="task ${task.completed ? "completed" : ""}">${task.value}</h3>
-      <p>${des.value}</p>
-      <p class="fa fa-trash" onclick="removeTask(this)">x</p>`;
+  li.innerHTML = `<div id="${taskx.id}"><section class="checkbox"></section>
+  <h3 class="task ${taskx.completed ? "completed" : ""}" >${taskx.task}</h3>
+    <p>${taskx.des}</p>
+    <section class= "kill" onclick="removeTask(this)"></section></div>`;
   list.insertBefore(li, list.children[0]);
   // clear input
   task.value = "";
   des.value = "";
-}
+};
 
 const taskComplete = (event) => {
   let tasks = Array.from(JSON.parse(localStorage.getItem("tasks")));
@@ -76,7 +82,7 @@ const taskComplete = (event) => {
   });
   localStorage.setItem("tasks", JSON.stringify(tasks));
   event.nextElementSibling.classList.toggle("completed");
-}
+};
 
 const removeTask = (event) => {
   let tasks = Array.from(JSON.parse(localStorage.getItem("tasks")));
@@ -88,12 +94,12 @@ const removeTask = (event) => {
   });
   localStorage.setItem("tasks", JSON.stringify(tasks));
   event.parentElement.remove();
-}
+};
 
 const clear_me = () => {
   localStorage.clear();
   location.reload();
-}
+};
 
 const btn = document.getElementById("die");
 btn.addEventListener("click", clear_me);
